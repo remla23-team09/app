@@ -1,0 +1,13 @@
+function analyze() {
+    $("#result").text(""); // Clear the old message
+    const review = $("#review").val();
+    $.post("/analyze", {review: review}, function (data) {
+        $("#result").text(data.sentiment > 0 ? "😊" : "☹️");
+    }).fail(function () {
+        $("#result").text("Error");
+    });
+}
+
+$(document).ready(function () {
+    $("#submit").on("click", analyze);
+});
