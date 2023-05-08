@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import os
 import requests
+from test_package_15551 import cookie2dict
 
 app = Flask(__name__)
 MODEL_SERVICE_URL = os.environ.get("MODEL_HOST", "http://localhost:8081")
@@ -12,6 +13,7 @@ def index():
 @app.route("/analyze", methods=["POST"])
 def analyze():
     review = request.form.get("review")
+    print(cookie2dict('some cookie=true; some_other_cookie=false').ToDict())
     if not review:
         return jsonify({"error": "Review is empty."}), 400
 
