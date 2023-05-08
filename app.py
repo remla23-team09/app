@@ -22,11 +22,11 @@ def analyze():
         payload = {"text": review}
         response = requests.post(f"{MODEL_SERVICE_URL}/predict", json=payload, headers=headers)
         response.raise_for_status()
-        result = response.json()["result"]
+        prediction = response.json()["prediction"]
     except requests.exceptions.RequestException as e:
         return jsonify({"error": str(e)}), 500
 
-    return jsonify({"sentiment": result})
+    return jsonify({"prediction": prediction})
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
