@@ -5,6 +5,7 @@ from test_package_15551 import cookie2dict
 from random import random
 
 app = Flask(__name__)
+
 MODEL_SERVICE_URL = os.environ.get("MODEL_HOST", "http://localhost:8081")
 
 countHomePage = 0
@@ -12,7 +13,7 @@ countButtonPress = 0
 
 @app.route("/")
 def index():
-    global coucountHomePagentIdx
+    global countHomePage
     countHomePage += 1
     return render_template("index.html")
 
@@ -40,7 +41,7 @@ def analyze():
 
 @app.route('/metrics', methods=['GET'])
 def metrics():
-    global countIdx, countSub
+    global countHomePage, countButtonPress
 
     m = "# HELP my_random This is just a random 'gauge' for illustration.\n"
     m+= "# TYPE my_random gauge\n"
@@ -48,8 +49,8 @@ def metrics():
 
     m+= "# HELP num_requests The number of requests that have been served, by page.\n"
     m+= "# TYPE num_requests counter\n"
-    m+= "num_requests{{page=\"index\"}} {}\n".format(countIdx)
-    m+= "num_requests{{page=\"sub\"}} {}\n".format(countSub)
+    m+= "num_requests{{page=\"index\"}} {}\n".format(countHomePage)
+    m+= "num_requests{{page=\"sub\"}} {}\n".format(countButtonPress)
 
     return Response(m, mimetype="text/plain")
 
