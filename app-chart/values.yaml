@@ -1,0 +1,3 @@
+configmap:
+  data:
+    MODEL_HOST: "http://model-service:8080"
