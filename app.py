@@ -28,7 +28,7 @@ def analyze():
     try:
         headers = {"accept": "application/json"}
         payload = {"text": review}
-        response = requests.post(f"http://localhost:8081/predict", json=payload, headers=headers)
+        response = requests.post(f"{MODEL_SERVICE_URL}/predict", json=payload, headers=headers)
         response.raise_for_status()
         sentiment = response.json()["sentiment"]
     except requests.exceptions.RequestException as e:
