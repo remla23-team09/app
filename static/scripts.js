@@ -8,6 +8,11 @@ function capitalizeWords(str) {
 function loadHistory() {
     const history = JSON.parse(localStorage.getItem("history")) || [];
     history.forEach(item => {
+        // Ignore items with empty reviews or restaurants
+        if (!item.review.trim() || !item.restaurant.trim()) {
+            return;
+        }
+
         // Add each item from the history to the page
         const listItem = `
             <li class="list-group-item">
@@ -18,16 +23,16 @@ function loadHistory() {
         $("#history").append(listItem);
     });
 
+    // Load the restaurant list from localStorage and add unique values to the dropdown
     const restaurants = JSON.parse(localStorage.getItem("restaurants")) || [];
-    const uniqueRestaurants = [...new Set(restaurants.map(capitalizeWords))].filter(Boolean);
+    const uniqueRestaurants = [...new Set(restaurants)];
     uniqueRestaurants.forEach(restaurant => {
-        if ($('#restaurant-filter option').filter(function() {
-            return this.text === restaurant;
-        }).length === 0) {
+        if (restaurant.trim() !== '') {
             $('#restaurant-filter').append(new Option(restaurant, restaurant));
         }
     });
 }
+
 
 // Save the review history and restaurant list to LocalStorage
 function saveHistory() {
@@ -49,9 +54,15 @@ function saveHistory() {
 
 function analyze() {
     $("#result").text(""); // Clear the old message
-    const review = $("#review").val();
-    let restaurant = $("#restaurant").val();
+    const review = $("#review").val().trim();
+    let restaurant = $("#restaurant").val().trim();
     restaurant = capitalizeWords(restaurant);  // capitalize each word in the restaurant name
+
+    // Don't send the request if the review or restaurant is empty
+    if (!review || !restaurant) {
+        $("#result").text("Please enter both a restaurant and a review.");
+        return;
+    }
 
     $.post("/analyze", {review: review, restaurant: restaurant}, function (data) {
         $("#result").text(data.sentiment > 0 ? "😊" : "☹️");
@@ -66,7 +77,7 @@ function analyze() {
         $("#history").append(listItem);
 
         // Add the restaurant to the filter list if not already present
-        if (restaurant && $('#restaurant-filter option').filter(function() {
+        if ($('#restaurant-filter option').filter(function() {
             return this.text === restaurant;
         }).length === 0) {
             $('#restaurant-filter').append(new Option(restaurant, restaurant));
@@ -81,6 +92,7 @@ function analyze() {
     });
     saveHistory();
 }
+
 
 
 function countSentiments() {
