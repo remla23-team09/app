@@ -6,6 +6,7 @@ from test_package_15551 import cookie2dict
 app = Flask(__name__)
 
 MODEL_SERVICE_URL = os.environ.get("MODEL_HOST", "http://localhost:8081")
+#MODEL_SERVICE_URL = "http://localhost:8081"
 
 history = []
 

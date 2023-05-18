@@ -1,3 +1,10 @@
+// Helper function to capitalize each word in a string
+function capitalizeWords(str) {
+    return str.replace(/\w\S*/g, function(txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}
+
 function loadHistory() {
     const history = JSON.parse(localStorage.getItem("history")) || [];
     history.forEach(item => {
@@ -10,8 +17,10 @@ function loadHistory() {
             </li>`;
         $("#history").append(listItem);
     });
+
     const restaurants = JSON.parse(localStorage.getItem("restaurants")) || [];
-    restaurants.forEach(restaurant => {
+    const uniqueRestaurants = [...new Set(restaurants.map(capitalizeWords))].filter(Boolean);
+    uniqueRestaurants.forEach(restaurant => {
         if ($('#restaurant-filter option').filter(function() {
             return this.text === restaurant;
         }).length === 0) {
@@ -19,7 +28,6 @@ function loadHistory() {
         }
     });
 }
-
 
 // Save the review history and restaurant list to LocalStorage
 function saveHistory() {
@@ -42,9 +50,12 @@ function saveHistory() {
 function analyze() {
     $("#result").text(""); // Clear the old message
     const review = $("#review").val();
-    const restaurant = $("#restaurant").val();
+    let restaurant = $("#restaurant").val();
+    restaurant = capitalizeWords(restaurant);  // capitalize each word in the restaurant name
+
     $.post("/analyze", {review: review, restaurant: restaurant}, function (data) {
         $("#result").text(data.sentiment > 0 ? "😊" : "☹️");
+
         // Add the new review to the history
         const listItem = `
             <li class="list-group-item">
@@ -53,12 +64,14 @@ function analyze() {
                 <strong>Sentiment:</strong> <span class="sentiment-indicator">${data.sentiment > 0 ? "😊" : "☹️"}</span>
             </li>`;
         $("#history").append(listItem);
+
         // Add the restaurant to the filter list if not already present
-        if ($('#restaurant-filter option').filter(function() {
+        if (restaurant && $('#restaurant-filter option').filter(function() {
             return this.text === restaurant;
         }).length === 0) {
             $('#restaurant-filter').append(new Option(restaurant, restaurant));
         }
+
         // Clear the form
         $("#review").val("");
         $("#restaurant").val("");
@@ -68,6 +81,7 @@ function analyze() {
     });
     saveHistory();
 }
+
 
 function countSentiments() {
     let posCount = 0;
