@@ -119,9 +119,11 @@ function filterReviews() {
         }
     });
     displaySentimentCount();  // update sentiment count after filtering
+    saveHistory();  // save the state of the page after filtering
 }
 
 $(document).ready(function () {
+    loadHistory();  // Load the history from localStorage when the page loads
     $("#submit").on("click", analyze);
     $("#restaurant-filter").change(function () {
         filterReviews();
