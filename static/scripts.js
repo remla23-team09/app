@@ -91,6 +91,7 @@ function analyze() {
         $("#result").text("Error");
     });
     saveHistory();
+    $("#result").text("");
 }
 
 
