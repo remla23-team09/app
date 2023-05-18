@@ -1,7 +1,14 @@
 function loadHistory() {
     const history = JSON.parse(localStorage.getItem("history")) || [];
     history.forEach(item => {
-        addReviewToList(item.restaurant, item.review, item.sentiment);
+        // Add each item from the history to the page
+        const listItem = `
+            <li class="list-group-item">
+                <strong>Restaurant:</strong> <span class="restaurant-name">${item.restaurant}</span><br>
+                <strong>Review:</strong> ${item.review} <br>
+                <strong>Sentiment:</strong> <span class="sentiment-indicator">${item.sentiment > 0 ? "😊" : "☹️"}</span>
+            </li>`;
+        $("#history").append(listItem);
     });
     const restaurants = JSON.parse(localStorage.getItem("restaurants")) || [];
     restaurants.forEach(restaurant => {
@@ -12,6 +19,7 @@ function loadHistory() {
         }
     });
 }
+
 
 // Save the review history and restaurant list to LocalStorage
 function saveHistory() {
