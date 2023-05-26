@@ -18,3 +18,8 @@
     text-transform: lowercase;
     font-family: "Segoe UI", Arial, sans-serif;
 }
+
+.btn-primary {
+    --bs-btn-bg: green;
+    --bs-btn-border-color: green;
+}
