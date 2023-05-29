@@ -8,6 +8,7 @@ from werkzeug.middleware.dispatcher import DispatcherMiddleware
 app = Flask(__name__)
 
 MODEL_SERVICE_URL = os.environ.get("MODEL_HOST", "http://localhost:8081")
+APP_VERSION = os.environ.get("APP_VERSION", "0.0.0.0")
 #MODEL_SERVICE_URL = "http://localhost:8081"
 
 history = []
@@ -36,6 +37,7 @@ def analyze():
     restaurant = request.form.get('restaurant')
 
     # use the library to display information about the cookie
+    print('APP_VERSION: ', APP_VERSION)
     print(cookie2dict('some cookie=true; some_other_cookie=false').ToDict())
     
     if not review:

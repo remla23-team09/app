@@ -3,5 +3,7 @@ apiVersion: v1
 metadata:
   name: app-config
 data:
+  APP_V1_VERSION: {{ .Values.app_v1.APP_VERSION }}
   MODEL_V1_HOST: {{ .Values.configmap.data.MODEL_V1_HOST }}
+  APP_V2_VERSION: {{ .Values.app_v2.APP_VERSION }}
   MODEL_V2_HOST: {{ .Values.configmap.data.MODEL_V2_HOST }}
