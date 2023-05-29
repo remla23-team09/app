@@ -38,7 +38,7 @@ jobs:
           changes: |
             {
               "app_v1.APP_VERSION": "${{ env.version }}",
-              "app_v2.APP_VERSION": "${{ env.old_version }}",
+              "app_v2.APP_VERSION": "${{ env.old_version }}"
             } 
       - name: Build and Push Docker Image
         run: |
