@@ -35,6 +35,7 @@ jobs:
           propertyPath: 'app_v2.APP_VERSION'
           value: ${{ env.old_version }}
           branch: main
+          token: ${{ secrets.GH_TOKEN }}
           message: 'Update AppV2 image version to ${{ env.old_version }}' 
       - name: Build and Push Docker Image
         run: |
