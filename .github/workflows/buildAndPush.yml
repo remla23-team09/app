@@ -32,11 +32,14 @@ jobs:
         uses: fjogeleit/yaml-update-action@v0.13.0
         with:
           valueFile: 'app-chart/values.yaml'
-          propertyPath: 'app_v2.APP_VERSION'
-          value: ${{ env.old_version }}
           branch: main
           token: ${{ secrets.GH_TOKEN }}
-          message: 'Update AppV2 image version to ${{ env.old_version }}' 
+          message: 'Update App image versions in app-chart/values.yaml'
+          changes: |
+            {
+              "app_v1.APP_VERSION": "${{ env.version }}",
+              "app_v2.APP_VERSION": "${{ env.old_version }}",
+            } 
       - name: Build and Push Docker Image
         run: |
           IMG=ghcr.io/${{steps.string.outputs.lowercase}}
