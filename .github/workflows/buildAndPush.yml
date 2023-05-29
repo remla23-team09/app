@@ -31,7 +31,7 @@ jobs:
       - name: Update AppV2 image version
         uses: fjogeleit/yaml-update-action@v0.13.0
         with:
-          valueFile: './app-chart/values.yaml'
+          valueFile: 'app-chart/values.yaml'
           propertyPath: 'app_v2.APP_VERSION'
           value: ${{ env.old_version }}
           branch: main
