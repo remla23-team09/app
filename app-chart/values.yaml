@@ -4,4 +4,5 @@ app_v2:
   APP_VERSION: 0.0.32
 configmap:
   data:
-    MODEL_HOST: http://model-service:8080
+    MODEL_V1_HOST: "http://model-service-v1-service:8080"
+    MODEL_V2_HOST: "http://model-service-v2-service:8080"

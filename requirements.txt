@@ -1,3 +1,4 @@
 Flask==2.2.4
 requests==2.30.0
 test-package-15551==1.0.0 # The Lib repository package
+prometheus_client
