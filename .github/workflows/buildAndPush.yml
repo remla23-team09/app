@@ -9,8 +9,6 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
-      - name: YAML Update Action
-        uses: fjogeleit/yaml-update-action@v0.13.0
       - name: Registry Login (ghcr.io)
         run: echo "${{ secrets.GH_TOKEN }}" | docker login ghcr.io -u $.lowercase --password-stdin
       - name: Parse version info from tag
@@ -31,7 +29,7 @@ jobs:
         with:
           string: ${{ github.repository }}
       - name: Update AppV2 image version
-        uses: fjogeleit/yaml-update-action@main
+        uses: fjogeleit/yaml-update-action@v0.13.0
         with:
           valueFile: 'app-chart/values.yaml'
           propertyPath: 'app_v2.APP_VERSION'
