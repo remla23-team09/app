@@ -27,6 +27,14 @@ jobs:
         uses: ASzc/change-string-case-action@v5
         with:
           string: ${{ github.repository }}
+      - name: Update AppV2 image version values.yaml
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: 'app-chart/values.yaml'
+          propertyPath: 'app_v2.APP_VERSION'
+          value: ${{ env.version }}.${{ env.version_major }}.${{ env.version_minor - 0.0.1 }}
+          branch: main
+          message: 'Update Image Version to ${{ env.version }}.${{ env.version_major }}.${{ env.version_minor - 0.0.1 }}' 
       - name: Build and Push Docker Image
         run: |
           IMG=ghcr.io/${{steps.string.outputs.lowercase}}
