@@ -22,19 +22,20 @@ jobs:
           echo "version_major=$MAJOR" >> $GITHUB_ENV
           echo "version_minor=$MINOR" >> $GITHUB_ENV
           echo "version_patch=$PATCH" >> $GITHUB_ENV
+          echo "old_version=${{ env.version }}.${{ env.version_major }}.${{ env.version_minor - 0.0.1 }} >> $GITHUB_ENV"
       - uses: actions/checkout@v3
       - id: string
         uses: ASzc/change-string-case-action@v5
         with:
           string: ${{ github.repository }}
-      - name: Update AppV2 image version values.yaml
+      - name: Update AppV2 image version
         uses: fjogeleit/yaml-update-action@main
         with:
           valueFile: 'app-chart/values.yaml'
           propertyPath: 'app_v2.APP_VERSION'
-          value: ${{ env.version }}.${{ env.version_major }}.${{ env.version_minor - 0.0.1 }}
+          value: ${{ env.old_version }}
           branch: main
-          message: 'Update Image Version to ${{ env.version }}.${{ env.version_major }}.${{ env.version_minor - 0.0.1 }}' 
+          message: 'Update AppV2 image version to ${{ env.old_version }}' 
       - name: Build and Push Docker Image
         run: |
           IMG=ghcr.io/${{steps.string.outputs.lowercase}}
