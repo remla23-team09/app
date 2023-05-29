@@ -1,7 +1,7 @@
 app_v1:
-  APP_VERSION: 0.0.35
+  APP_VERSION: 0.0.36
 app_v2:
-  APP_VERSION: 0.0.34
+  APP_VERSION: 0.0.35
 configmap:
   data:
     MODEL_V1_HOST: http://model-service-v1-service:8080
