@@ -65,6 +65,7 @@ function analyze() {
     }
 
     $.post("/analyze", {review: review, restaurant: restaurant}, function (data) {
+        enableFeedbackButtons();
         $("#result").text(data.sentiment > 0 ? "😊" : "☹️");
 
         // Add the new review to the history
@@ -87,6 +88,10 @@ function analyze() {
         $("#review").val("");
         $("#restaurant").val("");
         displaySentimentCount();  // update sentiment count after adding a review
+        
+        // Show the classification-related elements
+        $("#classification-container").show();
+
     }).fail(function () {
         $("#result").text("Error");
     });
@@ -157,11 +162,29 @@ function filterReviews() {
     saveHistory();  // save the state of the page after filtering
 }
 
+function disableFeedbackButtons() {
+    $("#correct").prop("disabled", true);
+    $("#wrong").prop("disabled", true);
+}
+
+function enableFeedbackButtons() {
+    $("#correct").prop("disabled", false);
+    $("#wrong").prop("disabled", false);
+}
+
 $(document).ready(function () {
     loadHistory();  // Load the history from localStorage when the page loads
     $("#submit").on("click", analyze);
     $("#restaurant-filter").change(function () {
         filterReviews();
         displaySentimentCount();
+    });
+    $("#correct").click(function () {
+        $.post("/evaluate/correct", {});
+        disableFeedbackButtons();
+    });
+    $("#wrong").click(function () {
+        $.post("/evaluate/wrong", {});
+        disableFeedbackButtons();
     });
 });
