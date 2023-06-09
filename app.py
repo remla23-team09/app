@@ -1,23 +1,21 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, Response
 import os
 import requests
 from test_package_15551 import cookie2dict
-from prometheus_client import Counter, Gauge, Histogram, Summary, make_wsgi_app
+from prometheus_client import Counter, make_wsgi_app
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 app = Flask(__name__)
 
 MODEL_SERVICE_URL = os.environ.get("MODEL_HOST", "http://localhost:8081")
 APP_VERSION = os.environ.get("APP_VERSION", "0.0.0.0")
-#MODEL_SERVICE_URL = "http://localhost:8081"
 
 history = []
 
 button_counter = Counter("button_counter", "Count the number of button presses.")
 invalid_input_counter = Counter("invalid_input_counter", "Count the number of invalid user inputs.")
-# time_individual = Gauge("gauge_time", "Count the duration for different steps.", ["step"])
-# size_of_input = Histogram("histogram_size_of_input", "The number of characters in the input.", buckets=[0, 5, 10, 15, 20, 25, 50, 75, 100])
-# time_summary = Summary("summary_time", "Summarizing duration for different steps", ["step"])
+correct_predictions = Counter("correct_predictions", "Count the number of correct predictions.")
+wrong_predictions = Counter("wrong_predictions", "Count the number of wrong predictions.")
 
 app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
     '/metrics': make_wsgi_app()
@@ -61,6 +59,18 @@ def analyze():
     })
     
     return jsonify({"sentiment": sentiment})
+
+@app.route("/evaluate/correct", methods=["POST"])
+def correct():
+    global correct_predictions
+    correct_predictions.inc()
+    return Response()
+
+@app.route("/evaluate/wrong", methods=["POST"])
+def wrong():
+    global wrong_predictions
+    wrong_predictions.inc()
+    return Response()
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True)
