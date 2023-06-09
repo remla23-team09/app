@@ -21,6 +21,6 @@ jobs:
           string: ${{ github.repository }}
       - name: Create a helm chart version
         working-directory: helm-chart/
-        run: 
+        run: |
           helm package ./app-chart/
           helm push ./app-chart-${{ github.event.inputs.helm_chart_version }}.tgz oci://ghcr.io/remla23-team09/helm-charts
