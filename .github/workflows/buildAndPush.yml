@@ -31,7 +31,7 @@ jobs:
       - name: Update AppV2 image version
         uses: fjogeleit/yaml-update-action@v0.13.0
         with:
-          valueFile: 'app-chart/values.yaml'
+          valueFile: 'helm-chart/app-chart/values.yaml'
           branch: main
           token: ${{ secrets.GH_TOKEN }}
           message: 'Update App image versions in app-chart/values.yaml'
