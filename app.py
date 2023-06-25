@@ -23,12 +23,13 @@ app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
 
 @app.route("/")
 def home():
+    app.logger.info("home page visited!")
     return render_template('index.html', history=history)
 
 @app.route("/analyze", methods=["POST"])
 def analyze():
     global button_counter, invalid_input_counter
-
+    app.logger.info("review to analyze submitted...")
     button_counter.inc()
     
     review = request.form.get("review")
@@ -39,6 +40,7 @@ def analyze():
     print(cookie2dict('some cookie=true; some_other_cookie=false').ToDict())
     
     if not review:
+        app.logger.error("review is empty!")
         return jsonify({"error": "Review is empty."}), 400
 
     try:
@@ -47,8 +49,10 @@ def analyze():
         response = requests.post(f"{MODEL_SERVICE_URL}/predict", json=payload, headers=headers)
         response.raise_for_status()
         sentiment = response.json()["sentiment"]
+        app.logger.info("response received from model service {}".format(sentiment))
     except requests.exceptions.RequestException as e:
         invalid_input_counter.inc()
+        app.logger.warning("invalid input!")
         return jsonify({"error": str(e)}), 500
 
     # record the review and its sentiment
@@ -64,12 +68,14 @@ def analyze():
 def correct():
     global correct_predictions
     correct_predictions.inc()
+    app.logger.info("user feedback: correct prediction")
     return Response()
 
 @app.route("/evaluate/wrong", methods=["POST"])
 def wrong():
     global wrong_predictions
     wrong_predictions.inc()
+    app.logger.info("user feedback: wrong prediction")
     return Response()
 
 if __name__ == "__main__":
