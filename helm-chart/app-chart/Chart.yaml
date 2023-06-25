@@ -4,4 +4,4 @@ description: A Helm chart for web application
 appVersion: "0.0.10"
 type: application
 
-version: 0.0.2
+version: 0.0.3
