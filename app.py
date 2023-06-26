@@ -8,7 +8,6 @@ from werkzeug.middleware.dispatcher import DispatcherMiddleware
 app = Flask(__name__)
 
 MODEL_SERVICE_URL = os.environ.get("MODEL_HOST", "http://localhost:8081")
-# APP_VERSION = os.environ.get("APP_VERSION", "0.0.0.0")
 APP_VERSION = VersionUtil.get_version()
 
 history = []
@@ -45,6 +44,7 @@ def analyze():
     try:
         headers = {"accept": "application/json"}
         payload = {"text": review}
+        app.logger.info("sending request to model service at {}/predict".format(MODEL_SERVICE_URL))
         response = requests.post(f"{MODEL_SERVICE_URL}/predict", json=payload, headers=headers)
         response.raise_for_status()
         sentiment = response.json()["sentiment"]
