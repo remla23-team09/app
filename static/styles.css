@@ -18,10 +18,10 @@
     font-size: 19px; /* 20% smaller */
     font-weight: bold;
     text-transform: lowercase;
-    font-family: "Segoe UI", Arial, sans-serif;
+    font-family: "Comic Sans", Arial, sans-serif;
 }
 
 .btn-primary {
-    --bs-btn-bg: green;
-    --bs-btn-border-color: green;
+    --bs-btn-bg: purple;
+    --bs-btn-border-color: purple;
 }

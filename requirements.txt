@@ -3,3 +3,4 @@ flasgger==0.9.4
 requests==2.30.0
 PLZREMLA23Team09LibProject # The Lib repository package
 prometheus_client
+remla23team09librelease
