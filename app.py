@@ -1,14 +1,15 @@
 from flask import Flask, render_template, request, jsonify, Response
 import os
 import requests
-from test_package_15551 import cookie2dict
+from remla23team09librelease import VersionUtil
 from prometheus_client import Counter, make_wsgi_app
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 
 app = Flask(__name__)
 
 MODEL_SERVICE_URL = os.environ.get("MODEL_HOST", "http://localhost:8081")
-APP_VERSION = os.environ.get("APP_VERSION", "0.0.0.0")
+# APP_VERSION = os.environ.get("APP_VERSION", "0.0.0.0")
+APP_VERSION = VersionUtil.get_version()
 
 history = []
 
@@ -24,6 +25,8 @@ app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
 @app.route("/")
 def home():
     app.logger.info("home page visited!")
+    # use the library to display information about app version
+    print('APP_VERSION: ', APP_VERSION)
     return render_template('index.html', history=history)
 
 @app.route("/analyze", methods=["POST"])
@@ -35,9 +38,6 @@ def analyze():
     review = request.form.get("review")
     restaurant = request.form.get('restaurant')
 
-    # use the library to display information about the cookie
-    print('APP_VERSION: ', APP_VERSION)
-    print(cookie2dict('some cookie=true; some_other_cookie=false').ToDict())
     
     if not review:
         app.logger.error("review is empty!")
