@@ -25,8 +25,7 @@ app.wsgi_app = DispatcherMiddleware(app.wsgi_app, {
 @app.route("/")
 def home():
     app.logger.info("home page visited!")
-    # use the library to display information about app version
-    print('APP_VERSION: ', APP_VERSION)
+    app.logger.info("APP_VERSION: {}".format(APP_VERSION))
     return render_template('index.html', history=history)
 
 @app.route("/analyze", methods=["POST"])
